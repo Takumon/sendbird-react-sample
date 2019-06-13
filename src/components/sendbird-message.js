@@ -5,7 +5,6 @@ const APP_ID = process.env.REACT_APP_APP_ID;
 const USER_ID = process.env.REACT_APP_USER_ID;
 const CHANNEL_ID = process.env.REACT_APP_CHANNEL_ID;
 
-
 function SendBirdMessage() {
   const [messages, setMessages] = useState([]);
   const query = useRef(null);
