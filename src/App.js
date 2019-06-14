@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
-import SendBirdMessage from './components/sendbird-message';
+import SendBirdMessages from './components/sendbird-messages';
 
 function App() {
   return (
     <div className="App">
-      <SendBirdMessage />
+      <SendBirdMessages />
     </div>
   );
 }
