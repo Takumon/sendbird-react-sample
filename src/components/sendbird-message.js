@@ -7,8 +7,12 @@ const CHANNEL_ID = process.env.REACT_APP_CHANNEL_ID;
 
 function SendBirdMessage() {
   const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [channel, setChannel] = useState(null);
+
   const query = useRef(null);
   let currentQuery = query.current;
+
 
   useEffect(() => {
     let unmounted = false;
@@ -19,6 +23,7 @@ function SendBirdMessage() {
       const user = await connect(sb, USER_ID);
       const openedChannel = await openChannel(sb, CHANNEL_ID);
       await enterChannel(openedChannel);
+      setChannel(openedChannel);
 
       if (!query.current) {
         query.current = openedChannel.createPreviousMessageListQuery();
@@ -35,9 +40,17 @@ function SendBirdMessage() {
   }, []);
 
   return (
-    <ul>
-      {messages.map(m => <li>{m.message}</li>)}
-    </ul>
+    <>
+      <ul>
+        {messages.map(m => <li>{m.message}</li>)}
+      </ul>
+      <input
+        type="text"
+        value={newMessage}
+        onChange={e => setNewMessage(e.target.value)}
+      />
+      <button onClick={() => sendMessage(channel, newMessage)}>SEND!</button>
+    </>
   );
 }
 
@@ -92,6 +105,24 @@ function enterChannel(channel) {
         ? reject(error)
         : resolve('OK!');
     })
+  });
+}
+
+function sendMessage(channel, message) {
+  return new Promise((resolve, reject) => {
+    if(!channel) {
+      reject(`Incollect argument. channel is required.`);
+    }
+
+    if(!message) {
+      reject(`Incollect argument. message is required.`);
+    }
+
+    channel.sendUserMessage(message, (msg, error) => {
+      error
+        ? reject(error)
+        : resolve(msg);
+    });
   });
 }
 
