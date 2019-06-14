@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef  } from 'react';
 import SendBird from 'sendbird'
-import Message from './sendbird-message';
+import SendBirdMessage from './sendbird-message';
 
 const APP_ID = process.env.REACT_APP_APP_ID;
 const USER_ID = process.env.REACT_APP_USER_ID;
@@ -138,7 +138,7 @@ export default function SendBirdMessage() {
     <>
       <ul>
         {messages.map(m =>
-          <Message
+          <SendBirdMessage
             m={m}
             viewerUserId={m.sender.userId}
             updateFunc={updateFunc}
