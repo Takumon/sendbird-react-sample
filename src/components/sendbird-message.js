@@ -9,6 +9,7 @@ export default function Message({
   const [updatedMessages, setUpdatedMessages] = useState('');
   const [editable, setEditable] = useState(false);
 
+  console.log(m.sender.userId, viewerUserId)
   const postUser = m.sender.userId === viewerUserId
     ? 'Mine'
     : m.sender.userId;

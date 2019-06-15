@@ -1,14 +1,21 @@
 import React, { useState, useEffect, useRef  } from 'react';
+import { Link } from 'react-router-dom';
+import history from '../history'
+
 import SendBird from 'sendbird'
-import SendBirdMessage from './sendbird-message';
+import SendBirdMessage from '../components/sendbird-message';
 
 const APP_ID = process.env.REACT_APP_APP_ID;
-const USER_ID = process.env.REACT_APP_USER_ID;
 const CHANNEL_ID = process.env.REACT_APP_CHANNEL_ID;
 
 
 
-export default function SendBirdMessage() {
+export default function SendBirdMessages({ userId }) {
+  if (!userId) {
+    console.log('Please set userId');
+    history.push('/login')
+  }
+
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [channel, setChannel] = useState(null);
@@ -101,7 +108,7 @@ export default function SendBirdMessage() {
 
     (async () => {
       const sb = new SendBird({appId: APP_ID});
-      const user = await connect(sb, USER_ID);
+      const user = await connect(sb, userId);
       const openedChannel = await openChannel(sb, CHANNEL_ID);
       await enterChannel(openedChannel);
       setChannel(openedChannel);
@@ -136,11 +143,12 @@ export default function SendBirdMessage() {
 
   return (
     <>
+      <Link to='/login'>Logout</Link>
       <ul>
         {messages.map(m =>
           <SendBirdMessage
             m={m}
-            viewerUserId={m.sender.userId}
+            viewerUserId={userId}
             updateFunc={updateFunc}
             deleteFunc={deleteFunc}
           />
