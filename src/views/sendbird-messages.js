@@ -18,8 +18,11 @@ import {
   updateMessage,
   sendMessage,
 } from '../utils/sendbird';
-import MessageFormText from '../components/message-form-text';
-import MessageFormLink from '../components/message-form-link';
+
+import {
+  MessageTextFormCreate,
+  MessageLinkFormCreate,
+}from '../custom-messages';
 
 const { Header, Content, Footer } = Layout;
 
@@ -211,10 +214,10 @@ export default function SendBirdMessages({ userId }) {
               />
             )}
           </MessageArea>
-          <MessageFormText
+          <MessageTextFormCreate
             registerFunc={registerFunc}
           />
-          <MessageFormLink
+          <MessageLinkFormCreate
             registerFunc={registerFunc}
           />
         </Container>

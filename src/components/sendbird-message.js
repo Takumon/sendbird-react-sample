@@ -4,7 +4,12 @@ import {
   Button,
   Input,
 } from 'antd';
-import Text from '../messages/text.view';
+import {
+  MessageTextView,
+  MessageTextFormUpdate,
+  MessageLinkView,
+  MessageLinkFormUpdate,
+} from '../custom-messages';
 import {
   toCustom,
   createTextMessage,
@@ -46,50 +51,35 @@ export default function SendBirdMessage({
   const postUser = m.sender.userId === viewerUserId
     ? 'Mine'
     : m.sender.userId;
-    
+
   return (
       <Container>
         <AvatorArea>
           {postUser}
         </AvatorArea>
         {editable
-          ? (<>
-            <MessageArea>
-              <Input
-                type="text"
-                value={updatedMessages}
-                onChange={e => setUpdatedMessages(e.target.value)}
-              />
-            </MessageArea>
-            <ButtonArea>
-              <Button
-                onClick={e => {
-                  setEditable(false);
-                  setUpdatedMessages('');
-                }}
-              >CANCEL</Button>
-              <Button
-                onClick={() => {
-                  // TODO タイプごとに汎用化
-                  updateFunc(m, createTextMessage(updatedMessages));
-                  setEditable(false);
-                  setUpdatedMessages('');
-                }}
-              >UPDATE</Button>
-            </ButtonArea>
-          </>)
+          ? (
+            <CustomMessageFormUpdate
+              m={m}
+              updateFunc={updateFunc}
+              cancelFunc={() => {
+                console.log('falseにする')
+                setEditable(false);
+              }}
+            />
+          )
           : (<>
             <MessageArea>
-              <CustomMessage
+              <CustomMessageView
                 m={m}
                 viewerUserId={viewerUserId}
               />
             </MessageArea>
             <ButtonArea>
               <Button
-                onClick={e => {
+                onClick={() => {
+                  console.log('trueにする')
                   setEditable(true);
-                  setUpdatedMessages(m.customMessage.content);
                 }} 
               >EDITE</Button>
               <Button
@@ -104,18 +94,58 @@ export default function SendBirdMessage({
 }
 
 
-function CustomMessage({
+function CustomMessageFormUpdate({
+  m,
+  updateFunc,
+  cancelFunc,
+}) {
+  const message = toCustom(m)
+
+  switch(message.customMessage.type) {
+    case CUSTOM_MESSAGE_TYPE.TEXT:
+      return (
+        <MessageTextFormUpdate
+          message={message}
+          updateFunc={updateFunc}
+          cancelFunc={cancelFunc}
+        />
+      );
+    case CUSTOM_MESSAGE_TYPE.LINK:
+      return (
+        <MessageLinkFormUpdate
+          message={message}
+          updateFunc={updateFunc}
+          cancelFunc={cancelFunc}
+        />
+      );
+    case CUSTOM_MESSAGE_TYPE.IMAGE:
+      // 型チェック
+      // TODO
+      break;
+    case CUSTOM_MESSAGE_TYPE.CHOICE:
+      // 型チェック
+      // TODO
+      break;
+    case CUSTOM_MESSAGE_TYPE.ORIGINAL:
+      // 型チェック
+      // TODO
+      break;
+    default:
+      throw new Error(`Invalid message type = ${m.type}`)
+  }
+}
+            
+
+function CustomMessageView({
   m,
   viewerUserId,
 }) {
   const message = toCustom(m)
   switch(message.customMessage.type) {
     case CUSTOM_MESSAGE_TYPE.TEXT:
-      return <Text m={message} />
+      return <MessageTextView m={message} />
     case CUSTOM_MESSAGE_TYPE.LINK:
-      // 型チェック
-      // TODO
-      break;
+      return <MessageLinkView m={message} />
     case CUSTOM_MESSAGE_TYPE.IMAGE:
       // 型チェック
       // TODO

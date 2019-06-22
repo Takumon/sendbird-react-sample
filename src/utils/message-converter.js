@@ -44,9 +44,17 @@ export function toOriginal(m) {
   return result;
 }
 
-export function createTextMessage(messageText) {
+export function createTextMessage(text) {
   return JSON.stringify({
     type: CUSTOM_MESSAGE_TYPE.TEXT,
-    content: messageText,
+    text,
+  });
+}
+
+export function createLinkMessage(text, link) {
+  return JSON.stringify({
+    type: CUSTOM_MESSAGE_TYPE.LINK,
+    text,
+    link,
   });
 }
