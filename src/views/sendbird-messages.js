@@ -10,10 +10,12 @@ import {
   getMessage,
   getChannel,
   openChannel,
-  sendMessage,
   updateMessage,
+  sendMessage,
 } from '../utils/sendbird';
-
+import {
+  createTextMessage,
+} from '../utils/message-converter';
 const APP_ID = process.env.REACT_APP_APP_ID;
 const CHANNEL_ID = process.env.REACT_APP_CHANNEL_ID;
 
@@ -139,7 +141,7 @@ export default function SendBirdMessages({ userId }) {
       }
       const messages = await getMessage(query.current);
 
-      if(!unmounted) {
+      if(!unmounted && messages) {
         setMessages(messages);
       }
     })();
@@ -157,6 +159,7 @@ export default function SendBirdMessages({ userId }) {
         {messages.map(m =>
           <SendBirdMessage
             m={m}
+            key={m.messageId}
             viewerUserId={userId}
             updateFunc={updateFunc}
             deleteFunc={deleteFunc}
@@ -169,7 +172,8 @@ export default function SendBirdMessages({ userId }) {
         onChange={e => setNewMessage(e.target.value)}
       />
       <button onClick={() => {
-        registerFunc(newMessage);
+        registerFunc(createTextMessage(newMessage));
+        // clear input field
         setNewMessage('');
       }}>SEND!</button>
     </>

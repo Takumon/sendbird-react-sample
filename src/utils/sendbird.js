@@ -50,6 +50,7 @@ return new Promise((resolve, reject) => {
   });
 }
 
+
 export function sendMessage(channel, message) {
   return new Promise((resolve, reject) => {
     if(!channel) {
@@ -60,6 +61,7 @@ export function sendMessage(channel, message) {
       reject(`Incollect argument. message is required.`);
     }
 
+    console.log('XXXXXXXXXXXX', message)
     channel.sendUserMessage(message, (msg, error) => {
       error
         ? reject(error)
@@ -124,13 +126,13 @@ export function getMessage(query) {
     }
 
     if (query.hasMore && !query.isLoading) {
-    query.load(50, false, (messageList, error) => {
-        error
-        ? reject(error)
-        : resolve(messageList);
-    });
+      query.load(50, false, (messageList, error) => {
+          error
+          ? reject(error)
+          : resolve(messageList);
+      });
     } else {
-    resolve([]);
+      resolve([]);
     }
   });
 }
