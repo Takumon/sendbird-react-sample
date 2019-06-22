@@ -2,6 +2,7 @@ import React, { useState  } from 'react';
 import Text from '../messages/text.view';
 import {
   toCustom,
+  createTextMessage,
   CUSTOM_MESSAGE_TYPE,
 } from '../utils/message-converter';
 export default function SendBirdMessage({
@@ -36,7 +37,8 @@ export default function SendBirdMessage({
             >CANCEL</button>
             <button
               onClick={() => {
-                updateFunc(m, updatedMessages);
+                // TODO タイプごとに汎用化
+                updateFunc(m, createTextMessage(updatedMessages));
                 setEditable(false);
                 setUpdatedMessages('');
               }}
@@ -51,7 +53,7 @@ export default function SendBirdMessage({
             />
             <button onClick={e => {
               setEditable(true);
-              setUpdatedMessages(m.message);
+              setUpdatedMessages(m.customMessage.content);
             }} >EDITE</button>
             <button onClick={() => deleteFunc(m)} >DELETE</button>
           </>
