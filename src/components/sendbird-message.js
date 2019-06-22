@@ -1,6 +1,45 @@
 import React, { useState  } from 'react';
+import styled from '@emotion/styled'
+import { 
+  Button,
+  Input,
+} from 'antd';
+import {
+  MessageTextView,
+  MessageTextFormUpdate,
+  MessageLinkView,
+  MessageLinkFormUpdate,
+} from '../custom-messages';
+import {
+  toCustom,
+  createTextMessage,
+  CUSTOM_MESSAGE_TYPE,
+} from '../utils/message-converter';
 
-export default function Message({
+
+const Container = styled.div`
+  display: flex;
+  align-items: stretch;
+`;
+
+
+const AvatorArea = styled.div`
+  width: 36px;
+  border-radius: 16px;
+  border: 1px solid gray;
+  overflow: hidden;
+  margin-right: 1rem;
+`;
+
+const MessageArea = styled.div`
+  flex-grow: 1;
+  margin-right: 1rem;
+`;
+
+const ButtonArea = styled.div`
+`;
+
+export default function SendBirdMessage({
   m,
   viewerUserId,
   updateFunc,
@@ -9,48 +48,125 @@ export default function Message({
   const [updatedMessages, setUpdatedMessages] = useState('');
   const [editable, setEditable] = useState(false);
 
-  console.log(m.sender.userId, viewerUserId)
   const postUser = m.sender.userId === viewerUserId
     ? 'Mine'
     : m.sender.userId;
-    
+
   return (
-    <li>
-      { editable
-        ? (
-          <>
-            {postUser} :
-            <input
-              type="text"
-              value={updatedMessages}
-              onChange={e => setUpdatedMessages(e.target.value)}
+      <Container>
+        <AvatorArea>
+          {postUser}
+        </AvatorArea>
+        {editable
+          ? (
+            <CustomMessageFormUpdate
+              m={m}
+              updateFunc={updateFunc}
+              cancelFunc={() => {
+                console.log('falseにする')
+                setEditable(false);
+              }}
             />
-            <button
-              onClick={e => {
-                setEditable(false);
-                setUpdatedMessages('');
-              }}
-            >CANCEL</button>
-            <button
-              onClick={() => {
-                updateFunc(m, updatedMessages);
-                setEditable(false);
-                setUpdatedMessages('');
-              }}
-            >UPDATE</button>
-          </>
-        )
-        : (
-          <>
-            {postUser} : {m.message}
-            <button onClick={e => {
-              setEditable(true);
-              setUpdatedMessages(m.message);
-            }} >EDITE</button>
-            <button onClick={() => deleteFunc(m)} >DELETE</button>
-          </>
-        )
-      }
-    </li>
+          )
+          : (<>
+            <MessageArea>
+              <CustomMessageView
+                m={m}
+                viewerUserId={viewerUserId}
+              />
+            </MessageArea>
+            <ButtonArea>
+              <Button
+                onClick={() => {
+                  console.log('trueにする')
+                  setEditable(true);
+                }} 
+              >EDITE</Button>
+              <Button
+                onClick={() => deleteFunc(m)}
+                type="danger"
+              >DELETE</Button>
+            </ButtonArea>
+          </>)
+        }
+      </Container>
   );
+}
+
+
+function CustomMessageFormUpdate({
+  m,
+  updateFunc,
+  cancelFunc,
+}) {
+  const message = toCustom(m)
+
+  switch(message.customMessage.type) {
+    case CUSTOM_MESSAGE_TYPE.TEXT:
+      return (
+        <MessageTextFormUpdate
+          message={message}
+          updateFunc={updateFunc}
+          cancelFunc={cancelFunc}
+        />
+      );
+    case CUSTOM_MESSAGE_TYPE.LINK:
+      return (
+        <MessageLinkFormUpdate
+          message={message}
+          updateFunc={updateFunc}
+          cancelFunc={cancelFunc}
+        />
+      );
+    case CUSTOM_MESSAGE_TYPE.IMAGE:
+      // 型チェック
+      // TODO
+      break;
+    case CUSTOM_MESSAGE_TYPE.CHOICE:
+      // 型チェック
+      // TODO
+      break;
+    case CUSTOM_MESSAGE_TYPE.ORIGINAL:
+      // 型チェック
+      // TODO
+      break;
+    default:
+      throw new Error(`Invalid message type = ${m.type}`)
+  }
+}
+            
+
+function CustomMessageView({
+  m,
+  viewerUserId,
+}) {
+  const message = toCustom(m)
+  switch(message.customMessage.type) {
+    case CUSTOM_MESSAGE_TYPE.TEXT:
+      return <MessageTextView m={message} />
+    case CUSTOM_MESSAGE_TYPE.LINK:
+      return <MessageLinkView m={message} />
+    case CUSTOM_MESSAGE_TYPE.IMAGE:
+      // 型チェック
+      // TODO
+      break;
+    case CUSTOM_MESSAGE_TYPE.CHOICE:
+      // 型チェック
+      // TODO
+      break;
+    case CUSTOM_MESSAGE_TYPE.ORIGINAL:
+      // 型チェック
+      // TODO
+      break;
+    default:
+      // return (
+      //   <Text m ={{
+      //     type: CUSTOM_MESSAGE_TYPE.TEXT,
+      //     message: JSON.stringify({
+      //       content: m.message,
+      //     }),
+      //   }} />
+      // );
+      throw new Error(`Invalid message type = ${m.type}`)
+  }
 }

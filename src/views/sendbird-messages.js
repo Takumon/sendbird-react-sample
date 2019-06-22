@@ -1,14 +1,63 @@
 import React, { useState, useEffect, useRef  } from 'react';
 import { Link } from 'react-router-dom';
+import styled from '@emotion/styled'
 import history from '../history'
-
+import {
+  Layout,
+  Button,
+} from 'antd';
 import SendBird from 'sendbird'
 import SendBirdMessage from '../components/sendbird-message';
+import {
+  connect,
+  deleteMessage,
+  enterChannel,
+  getMessage,
+  getChannel,
+  openChannel,
+  updateMessage,
+  sendMessage,
+} from '../utils/sendbird';
+
+import {
+  MessageTextFormCreate,
+  MessageLinkFormCreate,
+}from '../custom-messages';
+
+const { Header, Content, Footer } = Layout;
 
 const APP_ID = process.env.REACT_APP_APP_ID;
 const CHANNEL_ID = process.env.REACT_APP_CHANNEL_ID;
 
+const Container = styled.div`
+  padding: 12px;
+`;
 
+const HeaderTitle = styled.div`
+  color: white;
+  font-size: 36px;
+  float: left;
+`;
+const MessageArea = styled.div`
+  div {
+    margin-bottom: 4px;
+  }
+  
+`;
+
+const SingleInputForm = styled.div`
+  margin-top: 2rem;
+  display: flex;
+  align-items: stretch;
+`;
+
+const SingleInputForm_Input = styled.div`
+  flex-grow: 1;
+`;
+
+const SingleInputForm_Button = styled.div`
+
+`;
 
 export default function SendBirdMessages({ userId }) {
   if (!userId) {
@@ -130,7 +179,7 @@ export default function SendBirdMessages({ userId }) {
       }
       const messages = await getMessage(query.current);
 
-      if(!unmounted) {
+      if(!unmounted && messages) {
         setMessages(messages);
       }
     })();
@@ -139,171 +188,45 @@ export default function SendBirdMessages({ userId }) {
     return () => unmounted = true;
   }, []);
 
-  console.log(messages)
 
   return (
-    <>
-      <Link to='/login'>Logout</Link>
-      <ul>
-        {messages.map(m =>
-          <SendBirdMessage
-            m={m}
-            viewerUserId={userId}
-            updateFunc={updateFunc}
-            deleteFunc={deleteFunc}
+    <Layout>
+      <Header>
+        <HeaderTitle>
+          Message
+        </HeaderTitle>
+        <Link to='/login'>
+          <Button>
+            Logout
+          </Button>
+        </Link>
+      </Header>
+      <Content>
+        <Container>
+          <MessageArea>
+            {messages.map(m =>
+              <SendBirdMessage
+                m={m}
+                key={m.messageId}
+                viewerUserId={userId}
+                updateFunc={updateFunc}
+                deleteFunc={deleteFunc}
+              />
+            )}
+          </MessageArea>
+          <MessageTextFormCreate
+            registerFunc={registerFunc}
           />
-        )}
-      </ul>
-      <input
-        type="text"
-        value={newMessage}
-        onChange={e => setNewMessage(e.target.value)}
-      />
-      <button onClick={() => {
-        registerFunc(newMessage);
-        setNewMessage('');
-      }}>SEND!</button>
-    </>
+          <MessageLinkFormCreate
+            registerFunc={registerFunc}
+          />
+        </Container>
+      </Content>
+      <Footer>Footer</Footer>
+    </Layout>
   );
 }
 
-
-
-
-function connect(sb, userId) {
-  return new Promise((resolve, reject) => {
-    if(!sb) {
-      reject(`Incollect argument. sb is required.`);
-    }
-    if(!userId) {
-      reject(`Incollect argument. userId is required.`);
-    }
-
-    sb.connect(userId, (user, error) => {
-      error
-        ? reject(error)
-        : resolve(user);
-    });
-  });
-}
-
-function openChannel(sb, channelId) {
-  return new Promise((resolve, reject) => {
-    if(!sb) {
-      reject(`Incollect argument. sb is required.`);
-    }
-    if(!channelId) {
-      reject(`Incollect argument. channelId is required.`);
-    }
-
-    sb.OpenChannel.getChannel(channelId, (openedChannel, error) => {
-      error
-        ? reject(error)
-        : resolve(openedChannel);
-    });
-  });
-}
-
-
-
-function enterChannel(channel) {
-  return new Promise((resolve, reject) => {
-    if(!channel) {
-      reject(`Incollect argument. channel is required.`);
-    }
-
-    channel.enter(function(response, error) {
-      error
-        ? reject(error)
-        : resolve('OK!');
-    })
-  });
-}
-
-function sendMessage(channel, message) {
-  return new Promise((resolve, reject) => {
-    if(!channel) {
-      reject(`Incollect argument. channel is required.`);
-    }
-
-    if(!message) {
-      reject(`Incollect argument. message is required.`);
-    }
-
-    channel.sendUserMessage(message, (msg, error) => {
-      error
-        ? reject(error)
-        : resolve(msg);
-    });
-  });
-}
-
-function updateMessage(channel, message, messageText) {
-  return new Promise((resolve, reject) => {
-    if(!channel) {
-      reject(`Incollect argument. channel is required.`);
-    }
-
-    if(!message) {
-      reject(`Incollect argument. message is required.`);
-    }
-
-    if(!messageText) {
-      reject(`Incollect argument. messageText is required.`);
-    }
-
-    channel.updateUserMessage(
-      message.messageId,
-      messageText,
-      message.data,
-      message.customType,
-      (msg, error) => {
-        error
-          ? reject(error)
-          : resolve(msg);
-      }
-    );
-  });
-}
-
-
-function deleteMessage(channel, message) {
-  return new Promise((resolve, reject) => {
-    if(!channel) {
-      reject(`Incollect argument. channel is required.`);
-    }
-
-    if(!message) {
-      reject(`Incollect argument. message is required.`);
-    }
-
-    channel.deleteMessage(Object.assign({}, message), (res, error) => {
-      error
-        ? reject(error)
-        : resolve('OK');
-    });
-  });
-}
-
-
-
-function getMessage(query) {
-  return new Promise((resolve, reject) => {
-    if(!query) {
-      reject(`Incollect argument. query is required.`);
-    }
-
-    if (query.hasMore && !query.isLoading) {
-      query.load(50, false, (messageList, error) => {
-        error
-          ? reject(error)
-          : resolve(messageList);
-      });
-    } else {
-      resolve([]);
-    }
-  });
-}
 
 function uuid4() {
   let d = new Date().getTime();
