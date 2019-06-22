@@ -1,6 +1,10 @@
 import React from 'react';
+import styled from '@emotion/styled'
+
+const Container = styled.div`
+  text-align: left;
+`;
 
 export default function Text({ m }) {
-  console.log(m);
-  return <div>{m.sender.userId} : {m.customMessage.content}</div>;
+  return <Container>{m.customMessage.content}</Container>;
 }

@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef  } from 'react';
 import { Link } from 'react-router-dom';
+import styled from '@emotion/styled'
 import history from '../history'
+import {
+  Input,
+  Button,
+} from 'antd';
 import SendBird from 'sendbird'
 import SendBirdMessage from '../components/sendbird-message';
 import {
@@ -19,7 +24,18 @@ import {
 const APP_ID = process.env.REACT_APP_APP_ID;
 const CHANNEL_ID = process.env.REACT_APP_CHANNEL_ID;
 
+const SingleInputForm = styled.div`
+  display: flex;
+  align-items: stretch;
+`;
 
+const SingleInputForm_Input = styled.div`
+  flex-grow: 1;
+`;
+
+const SingleInputForm_Button = styled.div`
+
+`;
 
 export default function SendBirdMessages({ userId }) {
   if (!userId) {
@@ -154,7 +170,12 @@ export default function SendBirdMessages({ userId }) {
 
   return (
     <>
-      <Link to='/login'>Logout</Link>
+      <h1>Messages</h1>
+      <Link to='/login'>
+        <Button>
+          Logout
+        </Button>
+      </Link>
       <ul>
         {messages.map(m =>
           <SendBirdMessage
@@ -166,16 +187,26 @@ export default function SendBirdMessages({ userId }) {
           />
         )}
       </ul>
-      <input
-        type="text"
-        value={newMessage}
-        onChange={e => setNewMessage(e.target.value)}
-      />
-      <button onClick={() => {
-        registerFunc(createTextMessage(newMessage));
-        // clear input field
-        setNewMessage('');
-      }}>SEND!</button>
+      <SingleInputForm>
+        <SingleInputForm_Input>
+          <Input
+            type="text"
+            value={newMessage}
+            placeholder="New message"
+            onChange={e => setNewMessage(e.target.value)}
+          />
+        </SingleInputForm_Input>
+        <SingleInputForm_Button>
+          <Button
+            onClick={() => {
+              registerFunc(createTextMessage(newMessage));
+              // clear input field
+              setNewMessage('');
+            }}
+            type="primary"
+          >SEND!</Button>
+        </SingleInputForm_Button>
+      </SingleInputForm>
     </>
   );
 }

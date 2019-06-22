@@ -1,10 +1,39 @@
 import React, { useState  } from 'react';
+import styled from '@emotion/styled'
+import { 
+  Button,
+  Input,
+} from 'antd';
 import Text from '../messages/text.view';
 import {
   toCustom,
   createTextMessage,
   CUSTOM_MESSAGE_TYPE,
 } from '../utils/message-converter';
+
+
+const Container = styled.div`
+  display: flex;
+  align-items: stretch;
+`;
+
+
+const AvatorArea = styled.div`
+  width: 36px;
+  border-radius: 16px;
+  border: 1px solid gray;
+  overflow: hidden;
+  margin-right: 1rem;
+`;
+
+const MessageArea = styled.div`
+  flex-grow: 1;
+  margin-right: 1rem;
+`;
+
+const ButtonArea = styled.div`
+`;
+
 export default function SendBirdMessage({
   m,
   viewerUserId,
@@ -19,52 +48,63 @@ export default function SendBirdMessage({
     : m.sender.userId;
     
   return (
-    <li>
-      { editable
-        ? (
-          <>
-            {postUser} :
-            <input
-              type="text"
-              value={updatedMessages}
-              onChange={e => setUpdatedMessages(e.target.value)}
-            />
-            <button
-              onClick={e => {
-                setEditable(false);
-                setUpdatedMessages('');
-              }}
-            >CANCEL</button>
-            <button
-              onClick={() => {
-                // TODO タイプごとに汎用化
-                updateFunc(m, createTextMessage(updatedMessages));
-                setEditable(false);
-                setUpdatedMessages('');
-              }}
-            >UPDATE</button>
-          </>
-        )
-        : (
-          <>
-            <MessageRapper
-              m={m}
-              viewerUserId={viewerUserId}
-            />
-            <button onClick={e => {
-              setEditable(true);
-              setUpdatedMessages(m.customMessage.content);
-            }} >EDITE</button>
-            <button onClick={() => deleteFunc(m)} >DELETE</button>
-          </>
-        )
-      }
-    </li>
+      <Container>
+        <AvatorArea>
+          {postUser}
+        </AvatorArea>
+        {editable
+          ? (<>
+            <MessageArea>
+              <Input
+                type="text"
+                value={updatedMessages}
+                onChange={e => setUpdatedMessages(e.target.value)}
+              />
+            </MessageArea>
+            <ButtonArea>
+              <Button
+                onClick={e => {
+                  setEditable(false);
+                  setUpdatedMessages('');
+                }}
+              >CANCEL</Button>
+              <Button
+                onClick={() => {
+                  // TODO タイプごとに汎用化
+                  updateFunc(m, createTextMessage(updatedMessages));
+                  setEditable(false);
+                  setUpdatedMessages('');
+                }}
+              >UPDATE</Button>
+            </ButtonArea>
+          </>)
+          : (<>
+            <MessageArea>
+              <CustomMessage
+                m={m}
+                viewerUserId={viewerUserId}
+              />
+            </MessageArea>
+            <ButtonArea>
+              <Button
+                onClick={e => {
+                  setEditable(true);
+                  setUpdatedMessages(m.customMessage.content);
+                }} 
+              >EDITE</Button>
+              <Button
+                onClick={() => deleteFunc(m)}
+                type="danger"
+              >DELETE</Button>
+            </ButtonArea>
+          </>)
+        }
+      </Container>
   );
 }
 
 
-function MessageRapper({
+function CustomMessage({
   m,
   viewerUserId,
 }) {
