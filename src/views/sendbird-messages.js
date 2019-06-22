@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from '@emotion/styled'
 import history from '../history'
 import {
-  Input,
+  Layout,
   Button,
 } from 'antd';
 import SendBird from 'sendbird'
@@ -18,13 +18,32 @@ import {
   updateMessage,
   sendMessage,
 } from '../utils/sendbird';
-import {
-  createTextMessage,
-} from '../utils/message-converter';
+import MessageFormText from '../components/message-form-text';
+import MessageFormLink from '../components/message-form-link';
+
+const { Header, Content, Footer } = Layout;
+
 const APP_ID = process.env.REACT_APP_APP_ID;
 const CHANNEL_ID = process.env.REACT_APP_CHANNEL_ID;
 
+const Container = styled.div`
+  padding: 12px;
+`;
+
+const HeaderTitle = styled.div`
+  color: white;
+  font-size: 36px;
+  float: left;
+`;
+const MessageArea = styled.div`
+  div {
+    margin-bottom: 4px;
+  }
+  
+`;
+
 const SingleInputForm = styled.div`
+  margin-top: 2rem;
   display: flex;
   align-items: stretch;
 `;
@@ -166,48 +185,42 @@ export default function SendBirdMessages({ userId }) {
     return () => unmounted = true;
   }, []);
 
-  console.log(messages)
 
   return (
-    <>
-      <h1>Messages</h1>
-      <Link to='/login'>
-        <Button>
-          Logout
-        </Button>
-      </Link>
-      <ul>
-        {messages.map(m =>
-          <SendBirdMessage
-            m={m}
-            key={m.messageId}
-            viewerUserId={userId}
-            updateFunc={updateFunc}
-            deleteFunc={deleteFunc}
+    <Layout>
+      <Header>
+        <HeaderTitle>
+          Message
+        </HeaderTitle>
+        <Link to='/login'>
+          <Button>
+            Logout
+          </Button>
+        </Link>
+      </Header>
+      <Content>
+        <Container>
+          <MessageArea>
+            {messages.map(m =>
+              <SendBirdMessage
+                m={m}
+                key={m.messageId}
+                viewerUserId={userId}
+                updateFunc={updateFunc}
+                deleteFunc={deleteFunc}
+              />
+            )}
+          </MessageArea>
+          <MessageFormText
+            registerFunc={registerFunc}
           />
-        )}
-      </ul>
-      <SingleInputForm>
-        <SingleInputForm_Input>
-          <Input
-            type="text"
-            value={newMessage}
-            placeholder="New message"
-            onChange={e => setNewMessage(e.target.value)}
+          <MessageFormLink
+            registerFunc={registerFunc}
           />
-        </SingleInputForm_Input>
-        <SingleInputForm_Button>
-          <Button
-            onClick={() => {
-              registerFunc(createTextMessage(newMessage));
-              // clear input field
-              setNewMessage('');
-            }}
-            type="primary"
-          >SEND!</Button>
-        </SingleInputForm_Button>
-      </SingleInputForm>
-    </>
+        </Container>
+      </Content>
+      <Footer>Footer</Footer>
+    </Layout>
   );
 }
 
