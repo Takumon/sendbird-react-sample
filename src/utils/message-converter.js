@@ -4,32 +4,7 @@ export const CUSTOM_MESSAGE_TYPE = {
   IMAGE: 'IMAGE',
   CHOICE: 'CHOICE',
   OTHER: 'OTHER',
-};
-
-/*
-ModelとViewを用意する
-いま考えられるのはこんな感じ
-*/
-const messageType = {
-  type: CUSTOM_MESSAGE_TYPE,
-  TEXT: {
-      content: String,
-  },
-  LINK: {
-      content: String,
-      url: String,
-  },
-  IMAGE: {
-      content: String,
-      baseUrlData: String,
-  },
-  CHOICE: {
-      question: String,
-      select: [String],
-  },
-  ORIGINAL: {
-      name: String,
-  },
+  CONFIRMATION: 'CONFIRMATION',
 };
 
 
@@ -44,6 +19,10 @@ export function toOriginal(m) {
   return result;
 }
 
+/*****************
+ * Type definition
+ *****************/
+
 export function createTextMessage(text) {
   return JSON.stringify({
     type: CUSTOM_MESSAGE_TYPE.TEXT,
@@ -56,5 +35,22 @@ export function createLinkMessage(text, link) {
     type: CUSTOM_MESSAGE_TYPE.LINK,
     text,
     link,
+  });
+}
+
+export function createImageMessage(link, description, alt) {
+  return JSON.stringify({
+    type: CUSTOM_MESSAGE_TYPE.IMAGE,
+    link,
+    description,
+    alt,
+  });
+}
+
+export function createConfirmationMessage(title, contents) {
+  return JSON.stringify({
+    type: CUSTOM_MESSAGE_TYPE.CONFIRMATION,
+    title,
+    contents,
   });
 }

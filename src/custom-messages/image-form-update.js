@@ -6,8 +6,10 @@ import {
   Button,
 } from 'antd';
 import {
-  createLinkMessage,
+  createImageMessage,
 } from '../utils/message-converter';
+
+const { TextArea } = Input;
 
 const Container = styled.div`
   margin-top: 2rem;
@@ -29,16 +31,18 @@ export default function LinkFormUpdate({
   cancelFunc,
 }) {
 
-  const [text, setText] = useState(message.customMessage.text);
   const [link, setLink] = useState(message.customMessage.link);
+  const [description, setDescription] = useState(message.customMessage.description);
+  const [alt, setAlt] = useState(message.customMessage.alt);
 
   function clearForm() {
-    setText('');
     setLink('');
+    setDescription('');
+    setAlt('');
   }
 
   function action() {
-    const messageStr = createLinkMessage(text, link);
+    const messageStr = createImageMessage(link, description, alt);
     updateFunc(message, messageStr);
     clearForm();
     cancelFunc();
@@ -50,15 +54,22 @@ export default function LinkFormUpdate({
       <InputArea>
         <Input
           type="text"
-          value={text}
-          onChange={e => setText(e.target.value)}
+          value={link}
+          onChange={e => setLink(e.target.value)}
+        />
+      </InputArea>
+      <InputArea>
+        <TextArea
+          rows={4}
+          value={description}
+          onChange={e => setDescription(e.target.value)}
         />
       </InputArea>
       <InputArea>
         <Input
           type="text"
-          value={link}
-          onChange={e => setLink(e.target.value)}
+          value={alt}
+          onChange={e => setAlt(e.target.value)}
         />
       </InputArea>
       <ButtonArea>

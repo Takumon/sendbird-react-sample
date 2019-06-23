@@ -1,5 +1,5 @@
 import { connect } from 'react-redux' ;
-import SendbirdMessages from '../views/sendbird-messages';
+import Messages from '../views/messages';
 import { setUserId } from '../actions';
 
 function mapStateToProps(state) {
@@ -15,4 +15,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(SendbirdMessages);
+)(Messages);

@@ -22,6 +22,8 @@ import {
 import {
   MessageTextFormCreate,
   MessageLinkFormCreate,
+  MessageImageFormCreate,
+  MessageConfirmationCreate,
 }from '../custom-messages';
 
 const { Header, Content, Footer } = Layout;
@@ -59,14 +61,13 @@ const SingleInputForm_Button = styled.div`
 
 `;
 
-export default function SendBirdMessages({ userId }) {
+export default function Messages({ userId }) {
   if (!userId) {
     console.log('Please set userId');
     history.push('/login')
   }
 
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
   const [channel, setChannel] = useState(null);
 
   const query = useRef(null);
@@ -179,6 +180,7 @@ export default function SendBirdMessages({ userId }) {
       }
       const messages = await getMessage(query.current);
 
+      console.log(messages)
       if(!unmounted && messages) {
         setMessages(messages);
       }
@@ -218,6 +220,12 @@ export default function SendBirdMessages({ userId }) {
             registerFunc={registerFunc}
           />
           <MessageLinkFormCreate
+            registerFunc={registerFunc}
+          />
+          <MessageImageFormCreate
+            registerFunc={registerFunc}
+          />
+          <MessageConfirmationCreate
             registerFunc={registerFunc}
           />
         </Container>
