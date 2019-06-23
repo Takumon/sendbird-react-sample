@@ -1,6 +1,8 @@
 import React, { useState  } from 'react';
 import styled from '@emotion/styled'
-import { Button } from 'antd';
+import { 
+  Button,
+} from 'antd';
 import {
   MessageTextView,
   MessageTextFormUpdate,
@@ -162,12 +164,10 @@ function CustomMessageView({
       // 型チェック
       // TODO
       break;
-
     case CUSTOM_MESSAGE_TYPE.ORIGINAL:
       // 型チェック
       // TODO
       break;
-
     default:
       // return (
       //   <Text m ={{

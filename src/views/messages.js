@@ -62,6 +62,10 @@ const SingleInputForm_Button = styled.div`
 
 `;
 
+const SingleInputForm_Button = styled.div`
+
+`;
+
 export default function Messages({ userId }) {
   if (!userId) {
     console.log('Please set userId');
