@@ -9,6 +9,7 @@ import {
   MessageImageView,
   MessageImageFormUpdate,
   MessageConfirmationView,
+  MessageFlightTicketListView,
 } from '../custom-messages';
 import {
   toCustom,
@@ -153,6 +154,9 @@ function CustomMessageView({
 
     case CUSTOM_MESSAGE_TYPE.CONFIRMATION:
       return <MessageConfirmationView m={message} />;
+
+    case CUSTOM_MESSAGE_TYPE.FLIGHT_TICKET_LIST:
+      return <MessageFlightTicketListView m={message} />;
 
     case CUSTOM_MESSAGE_TYPE.CHOICE:
       // 型チェック

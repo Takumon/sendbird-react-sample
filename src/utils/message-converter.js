@@ -5,6 +5,7 @@ export const CUSTOM_MESSAGE_TYPE = {
   CHOICE: 'CHOICE',
   OTHER: 'OTHER',
   CONFIRMATION: 'CONFIRMATION',
+  FLIGHT_TICKET_LIST: 'FLIGHT_TICKET_LIST',
 };
 
 
@@ -50,6 +51,14 @@ export function createImageMessage(link, description, alt) {
 export function createConfirmationMessage(title, contents) {
   return JSON.stringify({
     type: CUSTOM_MESSAGE_TYPE.CONFIRMATION,
+    title,
+    contents,
+  });
+}
+
+export function createFlightTicketListMessage(title, contents) {
+  return JSON.stringify({
+    type: CUSTOM_MESSAGE_TYPE.FLIGHT_TICKET_LIST,
     title,
     contents,
   });
