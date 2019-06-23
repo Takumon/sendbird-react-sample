@@ -48,24 +48,6 @@ const MessageArea = styled.div`
   
 `;
 
-const SingleInputForm = styled.div`
-  margin-top: 2rem;
-  display: flex;
-  align-items: stretch;
-`;
-
-const SingleInputForm_Input = styled.div`
-  flex-grow: 1;
-`;
-
-const SingleInputForm_Button = styled.div`
-
-`;
-
-const SingleInputForm_Button = styled.div`
-
-`;
-
 export default function Messages({ userId }) {
   if (!userId) {
     console.log('Please set userId');
