@@ -6,6 +6,7 @@ export const CUSTOM_MESSAGE_TYPE = {
   OTHER: 'OTHER',
   CONFIRMATION: 'CONFIRMATION',
   FLIGHT_TICKET_LIST: 'FLIGHT_TICKET_LIST',
+  PROFILE_FORM: 'PROFILE_FORM',
 };
 
 
@@ -63,3 +64,12 @@ export function createFlightTicketListMessage(title, contents) {
     contents,
   });
 }
+
+export function createProfileFormMessage(title) {
+  return JSON.stringify({
+    type: CUSTOM_MESSAGE_TYPE.PROFILE_FORM,
+    title,
+  });
+}
+
+

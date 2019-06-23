@@ -25,6 +25,7 @@ import {
   MessageImageFormCreate,
   MessageConfirmationCreate,
   MessageFlightTicketListCreate,
+  MessageProfileCreate,
 } from '../custom-messages';
 
 const { Header, Content, Footer } = Layout;
@@ -198,6 +199,7 @@ export default function Messages({ userId }) {
                 m={m}
                 key={m.messageId}
                 viewerUserId={userId}
+                registerFunc={registerFunc}
                 updateFunc={updateFunc}
                 deleteFunc={deleteFunc}
               />
@@ -216,6 +218,9 @@ export default function Messages({ userId }) {
             registerFunc={registerFunc}
           />
           <MessageFlightTicketListCreate
+            registerFunc={registerFunc}
+          />
+          <MessageProfileCreate
             registerFunc={registerFunc}
           />
         </Container>

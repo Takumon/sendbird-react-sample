@@ -12,6 +12,7 @@ import {
   MessageImageFormUpdate,
   MessageConfirmationView,
   MessageFlightTicketListView,
+  MessageProfileView,
 } from '../custom-messages';
 import {
   toCustom,
@@ -44,6 +45,7 @@ const ButtonArea = styled.div`
 export default function SendBirdMessage({
   m,
   viewerUserId,
+  registerFunc,
   updateFunc,
   deleteFunc
 }) {
@@ -73,6 +75,7 @@ export default function SendBirdMessage({
             <MessageArea>
               <CustomMessageView
                 m={m}
+                registerFunc={registerFunc}
                 viewerUserId={viewerUserId}
               />
             </MessageArea>
@@ -120,11 +123,13 @@ function CustomMessageFormUpdate({
         />
       );
     case CUSTOM_MESSAGE_TYPE.IMAGE:
-      return (<MessageImageFormUpdate
-        message={message}
-        updateFunc={updateFunc}
-        cancelFunc={cancelFunc}
-      />);
+      return (
+        <MessageImageFormUpdate
+          message={message}
+          updateFunc={updateFunc}
+          cancelFunc={cancelFunc}
+        />
+      );
     case CUSTOM_MESSAGE_TYPE.CHOICE:
       // 型チェック
       // TODO
@@ -141,24 +146,55 @@ function CustomMessageFormUpdate({
 
 function CustomMessageView({
   m,
+  registerFunc,
   viewerUserId,
 }) {
   const message = toCustom(m)
   switch(message.customMessage.type) {
     case CUSTOM_MESSAGE_TYPE.TEXT:
-      return <MessageTextView m={message} />;
+      return (
+        <MessageTextView
+          m={message}
+        />
+      );
 
     case CUSTOM_MESSAGE_TYPE.LINK:
-      return <MessageLinkView m={message} />;
+      return (
+        <MessageLinkView
+          m={message}
+        />
+      );
 
     case CUSTOM_MESSAGE_TYPE.IMAGE:
-      return <MessageImageView m={message} />;
+      return (
+        <MessageImageView
+          m={message}
+        />
+      );
 
     case CUSTOM_MESSAGE_TYPE.CONFIRMATION:
-      return <MessageConfirmationView m={message} />;
+      return (
+        <MessageConfirmationView
+          m={message}
+          registerFunc={registerFunc}
+        />
+      );
 
     case CUSTOM_MESSAGE_TYPE.FLIGHT_TICKET_LIST:
-      return <MessageFlightTicketListView m={message} />;
+      return (
+        <MessageFlightTicketListView
+          m={message}
+          registerFunc={registerFunc}
+        />
+      );
+
+    case CUSTOM_MESSAGE_TYPE.PROFILE_FORM:
+      return (
+        <MessageProfileView
+          m={message}
+          registerFunc={registerFunc}
+        />
+      );
 
     case CUSTOM_MESSAGE_TYPE.CHOICE:
       // 型チェック

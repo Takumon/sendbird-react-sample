@@ -98,6 +98,7 @@ export default function CarouselCell(props) {
     date,
     routes,
     selectable,
+    registerFunc,
   } = props;
   
   const [isShowDetail, setShowDetail] = useState(false);
@@ -131,6 +132,7 @@ export default function CarouselCell(props) {
     console.log('君に決めた！っていうメッセージを次に送る');
     // const parts = messagePartsForFlightTicketList(cards);
     // composer.send(parts);
+    // registerFunc()でやる
   }
 
 

@@ -2,7 +2,7 @@
 import React from 'react';
 import Carousel from './carousel';
 
-export default function FlightTicketListView({ m }) {
+export default function FlightTicketListView({ m, registerFunc }) {
 
   const {
     title,
@@ -15,6 +15,7 @@ export default function FlightTicketListView({ m }) {
     <>
       <div>{title}</div>
       <Carousel
+        registerFunc={registerFunc}
         contents={contents}
       />
     </>

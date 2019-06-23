@@ -67,7 +67,7 @@ export default function ConfirmationView({ m }) {
           <table>
             <tbody>
               {contents.map(d => (
-                <tr>
+                <tr key={d.name} >
                   <th>{d.name}</th>
                   <td>{d.value}</td>
                 </tr>

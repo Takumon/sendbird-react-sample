@@ -15,3 +15,6 @@ export { default as MessageConfirmationCreate } from "./confirmation-create";
 
 export { default as MessageFlightTicketListView } from "./flight-ticket-list/flight-ticket-list-view";
 export { default as MessageFlightTicketListCreate } from "./flight-ticket-list/flight-ticket-list-create";
+
+export { default as MessageProfileView } from "./profile/profile-view";
+export { default as MessageProfileCreate } from "./profile/profile-create";
