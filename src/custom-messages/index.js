@@ -21,3 +21,6 @@ export { default as MessageProfileCreate } from "./profile/profile-create";
 
 export { default as MessageFlightSeatView } from "./flight-seat/flight-seat-view";
 export { default as MessageFlightSeatCreate } from "./flight-seat/flight-seat-create";
+
+export { default as MessageFlightTicketPurchaseView } from "./flight-ticket-purchase/flight-ticket-purchase-view";
+export { default as MessageFlightTicketPurchaseCreate } from "./flight-ticket-purchase/flight-ticket-purchase-create";

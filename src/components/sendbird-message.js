@@ -14,6 +14,7 @@ import {
   MessageFlightTicketListView,
   MessageProfileView,
   MessageFlightSeatView,
+  MessageFlightTicketPurchaseView,
 } from '../custom-messages';
 import {
   toCustom,
@@ -204,7 +205,15 @@ function CustomMessageView({
           registerFunc={registerFunc}
         />
       );
-  
+
+    case CUSTOM_MESSAGE_TYPE.FLIGHT_TICKET_PURCHASE_FORM:
+      return (
+        <MessageFlightTicketPurchaseView
+          m={message}
+          registerFunc={registerFunc}
+        />
+      );
+      
     case CUSTOM_MESSAGE_TYPE.CHOICE:
       // 型チェック
       // TODO

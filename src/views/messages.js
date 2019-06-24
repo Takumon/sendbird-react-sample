@@ -27,6 +27,7 @@ import {
   MessageFlightTicketListCreate,
   MessageProfileCreate,
   MessageFlightSeatCreate,
+  MessageFlightTicketPurchaseCreate,
 } from '../custom-messages';
 
 const { Header, Content, Footer } = Layout;
@@ -227,6 +228,10 @@ export default function Messages({ userId }) {
           <MessageFlightSeatCreate
             registerFunc={registerFunc}
           />
+          <MessageFlightTicketPurchaseCreate
+            registerFunc={registerFunc}
+          />
+  
         </Container>
       </Content>
       <Footer>Footer</Footer>

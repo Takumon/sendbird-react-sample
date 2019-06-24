@@ -8,6 +8,7 @@ export const CUSTOM_MESSAGE_TYPE = {
   FLIGHT_TICKET_LIST: 'FLIGHT_TICKET_LIST',
   PROFILE_FORM: 'PROFILE_FORM',
   FLIGHT_SEAT_FORM: 'FLIGHT_SEAT_FORM',
+  FLIGHT_TICKET_PURCHASE_FORM: 'FLIGHT_TICKET_PURCHASE_FORM',
 };
 
 
@@ -81,3 +82,11 @@ export function createFlightSeatMessage(title, contents) {
   });
 }
 
+
+export function createFlightTicketPurchaseMessage(title, contents) {
+  return JSON.stringify({
+    type: CUSTOM_MESSAGE_TYPE.FLIGHT_TICKET_PURCHASE_FORM,
+    title,
+    contents,
+  });
+}
