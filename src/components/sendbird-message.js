@@ -13,6 +13,7 @@ import {
   MessageConfirmationView,
   MessageFlightTicketListView,
   MessageProfileView,
+  MessageFlightSeatView,
 } from '../custom-messages';
 import {
   toCustom,
@@ -122,14 +123,14 @@ function CustomMessageFormUpdate({
           cancelFunc={cancelFunc}
         />
       );
-    case CUSTOM_MESSAGE_TYPE.IMAGE:
-      return (
-        <MessageImageFormUpdate
-          message={message}
-          updateFunc={updateFunc}
-          cancelFunc={cancelFunc}
-        />
-      );
+      case CUSTOM_MESSAGE_TYPE.IMAGE:
+        return (
+          <MessageImageFormUpdate
+            message={message}
+            updateFunc={updateFunc}
+            cancelFunc={cancelFunc}
+          />
+        );
     case CUSTOM_MESSAGE_TYPE.CHOICE:
       // 型チェック
       // TODO
@@ -196,6 +197,14 @@ function CustomMessageView({
         />
       );
 
+    case CUSTOM_MESSAGE_TYPE.FLIGHT_SEAT_FORM:
+      return (
+        <MessageFlightSeatView
+          m={message}
+          registerFunc={registerFunc}
+        />
+      );
+  
     case CUSTOM_MESSAGE_TYPE.CHOICE:
       // 型チェック
       // TODO

@@ -18,3 +18,6 @@ export { default as MessageFlightTicketListCreate } from "./flight-ticket-list/f
 
 export { default as MessageProfileView } from "./profile/profile-view";
 export { default as MessageProfileCreate } from "./profile/profile-create";
+
+export { default as MessageFlightSeatView } from "./flight-seat/flight-seat-view";
+export { default as MessageFlightSeatCreate } from "./flight-seat/flight-seat-create";

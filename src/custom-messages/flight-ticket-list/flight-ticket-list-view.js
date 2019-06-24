@@ -13,7 +13,7 @@ export default function FlightTicketListView({ m, registerFunc }) {
 
   return (
     <>
-      <div>{title}</div>
+      {title && <div>{title}</div>}
       <Carousel
         registerFunc={registerFunc}
         contents={contents}
