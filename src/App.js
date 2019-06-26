@@ -4,15 +4,15 @@ import history from './history'
 import './App.css';
 import 'antd/dist/antd.css';
 import Login from './containers/login';
-import SendBirdMessages from './containers/sendbird-messages';
+import Messages from './containers/messages';
 
 function App() {
   return (
     <Router history={history}>
       <div className="App">
-        <Route exact path="/" component={SendBirdMessages} />
+        <Route exact path="/" component={Messages} />
         <Route exact path='/login' component={Login} />
-        <Route path='/channel' component={SendBirdMessages} />
+        <Route path='/channel' component={Messages} />
       </div>
     </Router>
   );

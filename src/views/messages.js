@@ -22,7 +22,13 @@ import {
 import {
   MessageTextFormCreate,
   MessageLinkFormCreate,
-}from '../custom-messages';
+  MessageImageFormCreate,
+  MessageConfirmationCreate,
+  MessageFlightTicketListCreate,
+  MessageProfileCreate,
+  MessageFlightSeatCreate,
+  MessageFlightTicketPurchaseCreate,
+} from '../custom-messages';
 
 const { Header, Content, Footer } = Layout;
 
@@ -45,28 +51,13 @@ const MessageArea = styled.div`
   
 `;
 
-const SingleInputForm = styled.div`
-  margin-top: 2rem;
-  display: flex;
-  align-items: stretch;
-`;
-
-const SingleInputForm_Input = styled.div`
-  flex-grow: 1;
-`;
-
-const SingleInputForm_Button = styled.div`
-
-`;
-
-export default function SendBirdMessages({ userId }) {
+export default function Messages({ userId }) {
   if (!userId) {
     console.log('Please set userId');
     history.push('/login')
   }
 
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
   const [channel, setChannel] = useState(null);
 
   const query = useRef(null);
@@ -179,6 +170,7 @@ export default function SendBirdMessages({ userId }) {
       }
       const messages = await getMessage(query.current);
 
+      console.log(messages)
       if(!unmounted && messages) {
         setMessages(messages);
       }
@@ -209,6 +201,7 @@ export default function SendBirdMessages({ userId }) {
                 m={m}
                 key={m.messageId}
                 viewerUserId={userId}
+                registerFunc={registerFunc}
                 updateFunc={updateFunc}
                 deleteFunc={deleteFunc}
               />
@@ -220,6 +213,25 @@ export default function SendBirdMessages({ userId }) {
           <MessageLinkFormCreate
             registerFunc={registerFunc}
           />
+          <MessageImageFormCreate
+            registerFunc={registerFunc}
+          />
+          <MessageConfirmationCreate
+            registerFunc={registerFunc}
+          />
+          <MessageFlightTicketListCreate
+            registerFunc={registerFunc}
+          />
+          <MessageProfileCreate
+            registerFunc={registerFunc}
+          />
+          <MessageFlightSeatCreate
+            registerFunc={registerFunc}
+          />
+          <MessageFlightTicketPurchaseCreate
+            registerFunc={registerFunc}
+          />
+  
         </Container>
       </Content>
       <Footer>Footer</Footer>

@@ -2,17 +2,22 @@ import React, { useState  } from 'react';
 import styled from '@emotion/styled'
 import { 
   Button,
-  Input,
 } from 'antd';
 import {
   MessageTextView,
   MessageTextFormUpdate,
   MessageLinkView,
   MessageLinkFormUpdate,
+  MessageImageView,
+  MessageImageFormUpdate,
+  MessageConfirmationView,
+  MessageFlightTicketListView,
+  MessageProfileView,
+  MessageFlightSeatView,
+  MessageFlightTicketPurchaseView,
 } from '../custom-messages';
 import {
   toCustom,
-  createTextMessage,
   CUSTOM_MESSAGE_TYPE,
 } from '../utils/message-converter';
 
@@ -42,10 +47,10 @@ const ButtonArea = styled.div`
 export default function SendBirdMessage({
   m,
   viewerUserId,
+  registerFunc,
   updateFunc,
   deleteFunc
 }) {
-  const [updatedMessages, setUpdatedMessages] = useState('');
   const [editable, setEditable] = useState(false);
 
   const postUser = m.sender.userId === viewerUserId
@@ -72,6 +77,7 @@ export default function SendBirdMessage({
             <MessageArea>
               <CustomMessageView
                 m={m}
+                registerFunc={registerFunc}
                 viewerUserId={viewerUserId}
               />
             </MessageArea>
@@ -118,10 +124,14 @@ function CustomMessageFormUpdate({
           cancelFunc={cancelFunc}
         />
       );
-    case CUSTOM_MESSAGE_TYPE.IMAGE:
-      // 型チェック
-      // TODO
-      break;
+      case CUSTOM_MESSAGE_TYPE.IMAGE:
+        return (
+          <MessageImageFormUpdate
+            message={message}
+            updateFunc={updateFunc}
+            cancelFunc={cancelFunc}
+          />
+        );
     case CUSTOM_MESSAGE_TYPE.CHOICE:
       // 型チェック
       // TODO
@@ -138,18 +148,72 @@ function CustomMessageFormUpdate({
 
 function CustomMessageView({
   m,
+  registerFunc,
   viewerUserId,
 }) {
   const message = toCustom(m)
   switch(message.customMessage.type) {
     case CUSTOM_MESSAGE_TYPE.TEXT:
-      return <MessageTextView m={message} />
+      return (
+        <MessageTextView
+          m={message}
+        />
+      );
+
     case CUSTOM_MESSAGE_TYPE.LINK:
-      return <MessageLinkView m={message} />
+      return (
+        <MessageLinkView
+          m={message}
+        />
+      );
+
     case CUSTOM_MESSAGE_TYPE.IMAGE:
-      // 型チェック
-      // TODO
-      break;
+      return (
+        <MessageImageView
+          m={message}
+        />
+      );
+
+    case CUSTOM_MESSAGE_TYPE.CONFIRMATION:
+      return (
+        <MessageConfirmationView
+          m={message}
+          registerFunc={registerFunc}
+        />
+      );
+
+    case CUSTOM_MESSAGE_TYPE.FLIGHT_TICKET_LIST:
+      return (
+        <MessageFlightTicketListView
+          m={message}
+          registerFunc={registerFunc}
+        />
+      );
+
+    case CUSTOM_MESSAGE_TYPE.PROFILE_FORM:
+      return (
+        <MessageProfileView
+          m={message}
+          registerFunc={registerFunc}
+        />
+      );
+
+    case CUSTOM_MESSAGE_TYPE.FLIGHT_SEAT_FORM:
+      return (
+        <MessageFlightSeatView
+          m={message}
+          registerFunc={registerFunc}
+        />
+      );
+
+    case CUSTOM_MESSAGE_TYPE.FLIGHT_TICKET_PURCHASE_FORM:
+      return (
+        <MessageFlightTicketPurchaseView
+          m={message}
+          registerFunc={registerFunc}
+        />
+      );
+      
     case CUSTOM_MESSAGE_TYPE.CHOICE:
       // 型チェック
       // TODO
